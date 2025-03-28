@@ -1,0 +1,27 @@
+.buttonList {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 15px;
+  list-style-type: none;
+}
+
+.mainButton {
+  min-width: 90px;
+  padding: 10px 15px;
+  border-radius: 60px;
+  background-color: #1d1d1d;
+  border: none;
+  color: #FFF;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.15);
+
+  font-size: 17px;
+  line-height: 1;
+
+  transition: background-color .5s cubic-bezier(.4, 0, .2, 1), color .5s cubic-bezier(.4, 0, .2, 1);
+}
+
+.mainButton:hover {
+  background-color: #484848;
+  color: #BEA69E;
+}

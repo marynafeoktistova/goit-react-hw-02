@@ -1,35 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Description from './components/Description/Description';
+import Feedback from './components/Feedback/Feedback';
+import Notification from './components/Notification/Notification';
+import Options from './components/Options/Options';
+import css from './App.module.css';
+
+import { useState, useEffect } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const typeRewiews = {
+    good: 0,
+    neutral: 0,
+    bad: 0,
+  };
+
+  const [values, setValues] = useState(() => {
+    const savedValues = window.localStorage.getItem('saved-values');
+    if (savedValues !== null) {
+      return JSON.parse(savedValues);
+    }
+    return typeRewiews;
+  });
+
+  useEffect(() => {
+    window.localStorage.setItem('saved-values', JSON.stringify(values));
+  }, [values]);
+
+  const totalFeedback = values.good + values.neutral + values.bad;
+  const positiveFeedback = Math.round(((values.good + values.neutral) / totalFeedback) * 100);
+
+  const updateFeedback = feedbackType => {
+    setValues({
+      ...values,
+      [feedbackType]: values[feedbackType] + 1,
+    });
+  };
+
+  const resetFeedbackButton = () => setValues(typeRewiews);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <section className={css.container}>
+      <Description />
+      <Options onClickFeedback={feedbackType => updateFeedback(feedbackType)} resetFeedback={totalFeedback >= 1} resetButton={resetFeedbackButton} />
+      {totalFeedback >= 1 && <Feedback feedbackObj={values} feedbackTotal={totalFeedback} feedbackPositive={positiveFeedback} />}
+      {totalFeedback < 1 && <Notification />}
+    </section>
+  );
 }
 
-export default App
+export default App;

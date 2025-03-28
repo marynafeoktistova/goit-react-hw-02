@@ -1,0 +1,11 @@
+.divContainer {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+
+  margin-bottom: 10px;
+}
+
+.feedbackParagraf {
+  font-size: 18px;
+}
